@@ -1,0 +1,105 @@
+From e414118fc6095b1eba5780923d1bc9598bc6fc6d Mon Sep 17 00:00:00 2001
+From: Ilya Lebedev <lolmaxlik24@gmail.com>
+Date: Thu, 11 May 2017 16:20:00 +0300
+Subject: [PATCH] add author info
+
+---
+ res/values-ru/strings.xml                        |  1 +
+ res/values/strings.xml                           |  3 +++
+ res/xml/device_info_settings.xml                 |  8 ++++++++
+ src/com/android/settings/DeviceInfoSettings.java | 13 +++++++++++++
+ 4 files changed, 25 insertions(+)
+
+diff --git a/res/values-ru/strings.xml b/res/values-ru/strings.xml
+index 08f6f10..24cce67 100644
+--- a/res/values-ru/strings.xml
++++ b/res/values-ru/strings.xml
+@@ -31,6 +31,7 @@
+       <item quantity="other">Вы почти у цели. Осталось <xliff:g id="STEP_COUNT_1">%1$d</xliff:g> шагов.</item>
+     </plurals>
+     <string name="show_dev_on" msgid="1110711554982716293">"Вы стали разработчиком!"</string>
++	<string name="author_info">"Автор сборки"</string>
+     <string name="show_dev_already" msgid="2151632240145446227">"Не нужно, вы уже разработчик"</string>
+     <string name="header_category_wireless_networks" msgid="5110914332313954940">"Беспроводные сети"</string>
+     <string name="header_category_connections" msgid="6471513040815680662">"Подключения"</string>
+diff --git a/res/values/strings.xml b/res/values/strings.xml
+index 6a5d5d8..40ca9da 100644
+--- a/res/values/strings.xml
++++ b/res/values/strings.xml
+@@ -33,6 +33,8 @@
+     <!-- Device Info --> <skip />
+     <!-- Device Info screen. Used for a status item's value when the proper value is not known -->
+     <string name="device_info_default">Unknown</string>
++    <!-- Device Info screen. Used for a status item's value when the proper value is not known -->
++    <string name="author_info_default">lolmaxlik | SRT TEAM</string>
+     <!-- [CHAR LIMIT=NONE] Device Info screen. Countdown for user taps to enable development settings -->
+     <plurals name="show_dev_countdown">
+         <item quantity="one">You are now <xliff:g id="step_count">%1$d</xliff:g> step away from being a developer.</item>
+@@ -2135,6 +2137,7 @@
+ 
+     <!-- About phone screen, status item label  [CHAR LIMIT=40] -->
+     <string name="firmware_version">Android version</string>
++	<string name="author_info">Build author</string>
+     <!-- About phone screen, status item label  [CHAR LIMIT=60] -->
+     <string name="security_patch">Android security patch level</string>
+     <!-- About phone screen, status item label  [CHAR LIMIT=40] -->
+diff --git a/res/xml/device_info_settings.xml b/res/xml/device_info_settings.xml
+index 4e47b56..6aeef0a 100644
+--- a/res/xml/device_info_settings.xml
++++ b/res/xml/device_info_settings.xml
+@@ -118,6 +118,14 @@
+                 android:title="@string/security_patch"
+                 android:summary="@string/device_info_default"/>
+ 
++        <!-- Author Info -->
++        <PreferenceScreen android:key="author_info"
++                android:title="@string/author_info"
++                android:summary="@string/author_info_default">
++                <intent android:action="android.intent.action.VIEW"
++                        android:data="https://4pda.ru/forum/index.php?showuser=4443792" />
++        </PreferenceScreen>
++
+         <!-- Device FCC equipment id -->
+         <Preference android:key="fcc_equipment_id"
+                 style="?android:preferenceInformationStyle"
+diff --git a/src/com/android/settings/DeviceInfoSettings.java b/src/com/android/settings/DeviceInfoSettings.java
+index 3eb2f90..2af6601 100644
+--- a/src/com/android/settings/DeviceInfoSettings.java
++++ b/src/com/android/settings/DeviceInfoSettings.java
+@@ -83,6 +83,7 @@ public class DeviceInfoSettings extends SettingsPreferenceFragment implements In
+     private static final String KEY_BASEBAND_VERSION = "baseband_version";
+     private static final String KEY_FIRMWARE_VERSION = "firmware_version";
+     private static final String KEY_SECURITY_PATCH = "security_patch";
++	private static final String KEY_AUTHOR_INFO = "author_info";
+     private static final String KEY_UPDATE_SETTING = "additional_system_update_settings";
+     private static final String KEY_EQUIPMENT_ID = "fcc_equipment_id";
+     private static final String PROPERTY_EQUIPMENT_ID = "ro.ril.fccid";
+@@ -152,6 +153,9 @@ public class DeviceInfoSettings extends SettingsPreferenceFragment implements In
+         findPreference(KEY_MOD_API_LEVEL).setEnabled(true);
+         findPreference(KEY_MOD_BUILD_DATE).setEnabled(true);
+ 
++            String author_info = getResources().getString(R.string.author_info_default);
++            setStringSummary(KEY_AUTHOR_INFO, author_info);	
++
+         if (!SELinux.isSELinuxEnabled()) {
+             String status = getResources().getString(R.string.selinux_status_disabled);
+             setStringSummary(KEY_SELINUX_STATUS, status);
+@@ -322,6 +326,15 @@ public class DeviceInfoSettings extends SettingsPreferenceFragment implements In
+                 return true;
+             }
+ 
++
++        } else if (preference.getKey().equals(KEY_AUTHOR_INFO)) {
++            if (getPackageManager().queryIntentActivities(preference.getIntent(), 0).isEmpty()) {
++                // Don't send out the intent to stop crash
++                Log.w(LOG_TAG, "Stop click action on " + KEY_AUTHOR_INFO + ": "
++                        + "queryIntentActivities() returns empty" );
++                return true;
++            }
++
+             final UserManager um = (UserManager) getSystemService(Context.USER_SERVICE);
+             if (um.hasUserRestriction(UserManager.DISALLOW_DEBUGGING_FEATURES)) return true;
+ 
+-- 
+1.9.1
+
