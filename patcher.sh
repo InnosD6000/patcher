@@ -12,8 +12,6 @@ cd $ROM_TREE/build
 git clean -f -d && git reset --hard
 cd $ROM_TREE/packages/apps/LockClock
 git clean -f -d && git reset --hard
-cd $ROM_TREE/system/core
-git clean -f -d && git reset --hard
 cd $ROM_TREE/system/netd
 git clean -f -d && git reset --hard
 
@@ -22,5 +20,4 @@ cd $ROM_TREE
 ### Custom patches
 patch -d build					-p1 -s -N --no-backup-if-mismatch < $CUSTOM/build-tag.patch
 patch -d packages/apps/LockClock		-p1 -s -N --no-backup-if-mismatch < $CUSTOM/lockclock-wakelock.patch
-patch -d system/core				-p1 -s -N --no-backup-if-mismatch < $CUSTOM/silence_audit_log.patch
 patch -d system/netd				-p1 -s -N --no-backup-if-mismatch < $CUSTOM/tethering.patch
