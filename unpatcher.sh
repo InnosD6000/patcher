@@ -11,4 +11,6 @@ cd $ROM_TREE/system/core
 git clean -f -d && git reset --hard
 cd $ROM_TREE/system/sepolicy
 git clean -f -d && git reset --hard
+cd $ROM_TREE/system/netd
+git clean -f -d && git reset --hard
 cd $ROM_TREE

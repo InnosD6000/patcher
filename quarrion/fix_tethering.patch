@@ -1,0 +1,28 @@
+From b7e97c0b474a08a426c08c30923cdb36eb260c8e Mon Sep 17 00:00:00 2001
+From: Ilya Lebedev <lolmaxlik24@gmail.com>
+Date: Mon, 29 May 2017 14:25:55 +0300
+Subject: [PATCH] netd: server: Start tethering if IPv6 RPF is not supported.
+
+Change-Id: I7161aaf13e1ed513787475c50bb3d8914eb074c7
+---
+ server/NatController.cpp | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/server/NatController.cpp b/server/NatController.cpp
+index cda8f5f..c966a11 100644
+--- a/server/NatController.cpp
++++ b/server/NatController.cpp
+@@ -376,7 +376,9 @@ int NatController::setForwardRules(bool add, const char *intIface, const char *e
+         goto err_return;
+     }
+ 
+-    if (runCmd(ARRAY_SIZE(cmd4), cmd4) && add) {
++    // Revert "Don't start tethering if IPv6 RPF is not supported."
++    // STOPSHIP: Make this an error.
++    if (runCmd(ARRAY_SIZE(cmd4), cmd4) && add && false /* STOPSHIP */) {
+         rc = -1;
+         goto err_rpfilter;
+     }
+-- 
+1.9.1
+
