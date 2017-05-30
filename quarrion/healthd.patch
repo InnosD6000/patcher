@@ -1,0 +1,30 @@
+From 115cbf7e188ab0fb32301bfb8edd7ee1cfbc1678 Mon Sep 17 00:00:00 2001
+From: Ilya Lebedev <lolmaxlik24@gmail.com>
+Date: Tue, 30 May 2017 10:00:29 +0300
+Subject: [PATCH] healthd: New FakeBattery values
+
+For users...
+
+Change-Id: Id10cf0f3e9023d99f00df1f22d6339921e54fd67
+---
+ healthd/BatteryMonitor.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/healthd/BatteryMonitor.cpp b/healthd/BatteryMonitor.cpp
+index 86a4fc6..f6dc31f 100644
+--- a/healthd/BatteryMonitor.cpp
++++ b/healthd/BatteryMonitor.cpp
+@@ -38,8 +38,8 @@
+ 
+ #define POWER_SUPPLY_SUBSYSTEM "power_supply"
+ #define POWER_SUPPLY_SYSFS_PATH "/sys/class/" POWER_SUPPLY_SUBSYSTEM
+-#define FAKE_BATTERY_CAPACITY 42
+-#define FAKE_BATTERY_TEMPERATURE 424
++#define FAKE_BATTERY_CAPACITY 95
++#define FAKE_BATTERY_TEMPERATURE 53
+ #define ALWAYS_PLUGGED_CAPACITY 100
+ 
+ namespace android {
+-- 
+1.9.1
+
